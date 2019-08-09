@@ -1886,17 +1886,21 @@ var PDFViewerApplication = {
 };
 var validateFileURL = void 0;
 {
-  var HOSTED_VIEWER_ORIGINS = ['null', 'http://mozilla.github.io', 'https://mozilla.github.io'];
+  var HOSTED_VIEWER_ORIGINS = <%= ENV.fetch("PDFJS_VIEWER_ORIGINS", "").split(",") %>;
   validateFileURL = function validateFileURL(file) {
     if (file === undefined) {
       return;
     }
     try {
       var viewerOrigin = new URL(window.location.href).origin || 'null';
+      console.log("HOSTED: ", HOSTED_VIEWER_ORIGINS)
+      console.log("VIEWER: ", viewerOrigin)
       if (HOSTED_VIEWER_ORIGINS.indexOf(viewerOrigin) >= 0) {
+        console.log("Should return here!!!!")
         return;
       }
       var fileOrigin = new URL(file, window.location.href).origin;
+      console.log("FileOrigin: ", fileOrigin)
       if (fileOrigin !== viewerOrigin) {
         throw new Error('file origin does not match viewer\'s');
       }
